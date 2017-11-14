@@ -1,0 +1,37 @@
+<!--
+<?php
+$_max_upload=$max_upload*1024;
+print <<<EOT
+--> 
+<table width='100%' cellspacing='1' cellpadding='3' class="tablewidth">
+     <tr class="head"> 
+      <td> 
+        <div align='center'><b><font color="#FFFFFF">请选择要调用的内容</font></b></div>
+      </td>
+    </tr>
+    <tr> 
+      <td height="200" bgcolor='#FFFFFF' colspan="2" align="center">
+        <input type="radio" name="radiobutton" value="radiobutton" onclick="jump('article')">
+        软件
+        <input type="radio" name="radiobutton" value="radiobutton" onclick="jump('special')">
+        专题
+        <input type="radio" name="radiobutton" value="radiobutton" onclick="jump('specialsort')">
+        专题分类
+        <input type="radio" name="radiobutton" value="radiobutton" onclick="jump('fu_article')">
+        辅栏目
+        <input type="radio" name="radiobutton" value="radiobutton" onclick="jump('comment')">
+        软件评论
+		<SCRIPT LANGUAGE="JavaScript">
+<!--
+function jump(t){
+	window.location.href="index.php?lfj=$lfj&&job=$job&ch=$ch&chtype=$chtype&tag=$tag&ch_fid=$ch_fid&ch_pagetype=$ch_pagetype&ch_module=$ch_module&ch_ifjs=$ch_ifjs&mystyle=$mystyle&inc=$inc&cms_type="+t;
+}
+//-->
+</SCRIPT></td>
+    </tr>
+ 
+</table>
+<!--
+EOT;
+?>
+-->

@@ -1,0 +1,9 @@
+<?php
+
+return array(
+	'name'=>'ÏÂÔØÏµÍ³',
+	'pre'=>'download_',
+	'setup'=>1,
+);
+
+?>

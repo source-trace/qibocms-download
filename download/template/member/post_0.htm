@@ -1,0 +1,686 @@
+<!--
+<?php
+print <<<EOT
+--> 
+<style>
+.dragTable{
+	margin-top:5px;
+}
+.basetr{
+	display:$basetr;
+}
+.dragTable .tdL{
+	width:120px;
+	text-align:right;
+	padding:5px 10px 0 0;
+	vertical-align:top;
+}
+.dragTable .tdL span{
+	color:#f00;
+}
+.dragTable .tdR{
+	padding-top:3px;
+}
+.dragTable .submit{
+	text-align:center;
+}
+</style>
+<script type="text/javascript" src="$webdb[www_url]/ewebeditor/ckeditor/ckeditor.js"></script>
+<!--
+EOT;
+if(trim(preg_replace('/<([^<]*)>|&nbsp;/is',"",$webdb[PostNotice]))){print <<<EOT
+-->
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="dragTable" >
+  <tr> 
+    <td class="head">投稿注意事项!</td>
+  </tr>
+  <tr> 
+    <td class="middle">$webdb[PostNotice]</td>
+  </tr>
+</table>
+<!--
+EOT;
+}print <<<EOT
+-->
+<form name="FORM" id="FORM" method="post" action="?job=$job&step=post" onsubmit="return post();">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="dragTable" >
+  <tr> 
+    <td class="head">投稿</td>
+  </tr>
+  <tr> 
+    <td class="middle">
+<SCRIPT LANGUAGE="JavaScript">
+<!--
+function uppic(url,name,size,b){
+	get_obj('picurl').value=url;
+}
+function upfile(url,name,size,b){
+	document.getElementById(b).value=url;
+}
+//-->
+</SCRIPT>
+              <script src="$webdb[www_url]/images/default/setday.js"></script>
+              <SCRIPT>
+function foreColor_font()
+{
+  
+  var arr = showModalDialog('$webdb[www_url]/images/default/selcolor.htm', '', 'dialogWidth:18.5em; dialogHeight:17.5em; status:0');
+  if (arr != null)  get_obj('titlecolor').value=arr;
+  else  get_obj('titlecolor').focus();
+  get_obj('titlecolor').style.background=arr;
+}
+
+function post(){
+	if(document.getElementById("postfid")!=null&&(get_obj('postfid').value==''||parseInt(get_obj('postfid').value)<1)){
+		alert("请选择一个栏目");
+		choosetable('base');
+		get_obj('postfid').focus();
+		return false;
+	}
+	if(document.getElementById("title")!=null&&get_obj('title').value==''){
+		alert("标题不能为空");
+		choosetable('base');
+		get_obj('title').focus();
+		return false;
+	}
+	if(document.getElementById("yzimg")!=null)
+	{	
+		if(document.getElementById("yzimg").value==''){
+			alert("请输入正确验证码");
+			choosetable('base');
+			get_obj('yzimg').focus();
+			return false;
+		}
+	}
+	//get_obj("FORM").submit();
+	
+}
+  </SCRIPT>
+              <script>
+function javashowpic(values)
+{
+	if(values!= '') {	
+		document.images.myface.src='$webdb[www_url]/$webdb[updir]/'+values;
+		document.images.myface.width=100;
+	}else{
+		document.images.myface.src='$webdb[www_url]/images/default/pot.gif';
+		document.images.myface.width=5;
+	}
+	get_obj('picurl').value=values;
+}
+function Addpicnews(strFileName){
+	var arrName=strFileName.split('.');
+	var FileExt=arrName[1];
+	if (FileExt=='gif'||FileExt=='GIF'||FileExt=='JPG'||FileExt=='jpg'||FileExt=='bmp'){
+		get_obj('DefaultPicList').options[get_obj('DefaultPicList').length]=new Option(strFileName,strFileName);
+		get_obj('DefaultPicList').selectedIndex+=1;
+		javashowpic(strFileName);
+	}
+}
+function heightdisplay(){
+	if(parent.document.getElementById('member_mainiframe')!=null){
+		parent.document.getElementById('member_mainiframe').height=parseInt(parent.document.getElementById('member_mainiframe').height)+300;
+	}
+}
+</script>
+    	<div id="post_top">
+        	<span id="button_base" onclick="choosetable('base')">基本信息</span>
+            <span id="button_other" onclick="choosetable('other');heightdisplay()" >其它设置</span> 
+
+       </div>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="borderTable" id="basetable">
+          <!--
+EOT;
+if($job=="postnew"||$job=="edit"){
+$titlename = $m_config[moduleSet][title_name] ? "{$m_config[moduleSet][title_name]}" : "标题";
+print <<<EOT
+-->
+          <tr class="basetr"> 
+            <td class="tdL">所属分类：(<span>*</span>)</td>
+            <td class="tdR"> 
+              <select name="fid" onChange="choosefid(this,'$rsdb[aid]','$only')" id="postfid">
+                <option value=''>请选择一个栏目</option>$select_fid
+                 
+              </select>
+              <SCRIPT LANGUAGE="JavaScript">
+<!--
+function choosefid(selObj,aid,only){
+	fid=selObj.options[selObj.selectedIndex].value;
+	if(fid==='0'){
+		alert('你不能选择大分类,请选择一个黑色字体的子栏目');
+		return false;
+	}else if(fid===''){
+		alert('请选择一个子栏目');
+		return false;
+	}
+}
+//-->
+</SCRIPT>
+            </td>
+          </tr>
+          <tr class="basetr"> 
+            <td class="tdL">软件名称：(<span>*</span>)</td>
+            <td class="tdR"> 
+              <input type="text" name="postdb[title]" size="50" value="$rsdb[title]" id="title">
+              <span close="0$web_admin$groupdb[SetTileColor]"> 颜色: 
+              <input type="text" name="postdb[titlecolor]" style="background:$rsdb[titlecolor];" size="7" value="$rsdb[titlecolor]" id="titlecolor" onClick="foreColor_font();">
+              加粗: 
+              <input type="checkbox" name="postdb[fonttype]" value="1" $fonttype>
+              </span> 禁用评论: 
+              <input type="checkbox" name="postdb[forbidcomment]" value="1" $forbidcomment>
+            </td>
+          </tr>
+          <tr class="basetr"> 
+            <td class="tdL">关键字(标签)：(<span>*</span>)</td>
+            <td class="tdR"> 
+              <input type="text" name="postdb[keywords]" size="35" value="$rsdb[keywords]" id="keyword_s">
+              <select name="select2" onChange="MM_keyword(this)">
+                <option value='' selected>常用关键字</option>
+		  $keywords
+                   
+              </select>
+              <script language="JavaScript">
+<!--
+function MM_keyword(selObj){ //v3.0
+  va=selObj.options[selObj.selectedIndex].value
+  if (va!=''){
+  	if(get_obj('keyword_s').value==''){
+		get_obj('keyword_s').value=va;
+	}else{
+		vb=get_obj('keyword_s').value;
+		arr = vb.split(' ');
+		for(var i=0;i<arr.length;i++){
+			if(arr[i]==va){
+				alert(va+",已经存在了,不能雷同");
+				return ;
+			}
+		}
+		get_obj('keyword_s').value+=" "+va;
+	}
+  } 
+}
+//-->
+</script>
+              作为相关文章的索引,如多个用空格隔开 </td>
+          </tr>
+          <!--
+EOT;
+if(!$m_config[moduleSet][no_author]){
+print <<<EOT
+-->
+          <!--
+EOT;
+}if(!$m_config[moduleSet][no_from]){
+print <<<EOT
+-->
+          <!--
+EOT;
+}
+print <<<EOT
+-->
+          <tr class="basetr"> 
+            <td class="tdL">缩略图：</td>
+            <td class="tdR"> 
+              <input type="text" name="postdb[picurl]" size="40" value="$rsdb[picurl]" id="picurl">
+              <!--
+EOT;
+if($lfjdb){
+print <<<EOT
+-->
+              <input type="radio" name="postdb[automakesmall]" value="1" onclick="get_obj('cutimg_title').style.display='none';" checked>
+              系统自动截图 
+              <input type="radio" name="postdb[automakesmall]" value="0" onclick="get_obj('cutimg_title').style.display='';">
+              手工截图 宽: 
+              <input type="text" name="picWidth" id="picWidth" size="3" value="300">
+              高: 
+              <input type="text" name="picHeight" id="picHeight" size="3" value="225">
+              <a href="javascript:" style="display:none;color:red;" id="cutimg_title" onClick="javascript:cutimg();">[手工剪裁图片]</a> 
+              <br>
+              <iframe name='mainFrame2' frameborder=0 height=23 scrolling=no src='$webdb[www_url]/do/upfile.php?fn=uppic&dir=article/$fid&ISone=1' width=370></iframe> 
+              <!--
+EOT;
+}
+print <<<EOT
+-->
+              <script language="javascript">
+function cutimg() 
+{
+	var img=get_obj("picurl").value;
+	var cw=get_obj("picWidth").value;
+	var ch=get_obj("picHeight").value;
+	if(cw==''){
+		get_obj("picWidth").focus();
+		alert("请设置好图片宽度");return false;
+	}
+	if(ch==''){
+		get_obj("picHeight").focus();
+		alert("请设置好图片高度");return false;
+	}
+if(img!=''){
+	if(img.indexOf("http://")==-1){
+		img="$webdb[www_url]/$webdb[updir]/"+img;
+	}
+	//get_obj("automakesmall").checked=false;
+	window.open("$webdb[www_url]/do/cutimg.php?nextpic=1&job=cutimg&width="+cw+"&height="+ch+"&srcimg="+img,'',"width=480,height=430")
+}else{
+	get_obj("picurl").focus();
+	alert('图片地址不存在');
+}
+}
+</script>
+            </td>
+          </tr>
+		  
+		            <tr bgcolor="#FFFFFF" class="basetr">
+            <td>最后更新日期：</td>
+            <td>
+              <input type="text" name="postdb[update_time]" size="20" value="$rsdb[update_time]" onClick="setday(this)" >
+            </td>
+          </tr>
+ <!--{template}-->
+          <tr bgcolor="#FFFFFF" class="basetr">
+            <td>{title}</td>
+            <td>
+              {value}
+            </td>
+          </tr>
+		   <!--{/template}-->
+		   
+          <tr> 
+            <td  class='tdL'>软件地址:<font color=red>(必填)</font><br>
+              <a href='javascript:showinput_softurl()'>添加远程文件</a></td>
+            <td> 
+              <!--
+EOT;
+
+$upfiletype=str_replace(' ',',',trim($groupdb[upfileType]?$groupdb[upfileType]:$webdb[upfileType]));
+$upfiletype=str_replace('.','',$upfiletype);
+$max_upload=ini_get('upload_max_filesize')?ini_get('upload_max_filesize'):'0';
+print <<<EOT
+-->
+              注意:服务器限制单个文件大小不能超过 <font color=red>{$max_upload}</font> 
+              <script type="text/javascript" src="$webdb[www_url]/images/default/jquery-1.2.6.min.js"></script>
+              <script type="text/javascript" src="$webdb[www_url]/images/default/swfobject.js"></script>
+              <div id="sapload"></div>
+              <script type="text/javascript">
+	var so = new SWFObject("$webdb[www_url]/images/default/uploadmore.swf", "sapload", "450", "30", "9", "#ffffff");
+	so.addParam('wmode','transparent');
+	so.addVariable('config','$webdb[www_url]/do/swfuploadxml.php?filetype=$upfiletype');
+	so.write("sapload");
+	var titledb = new Array();
+	var urldb = new Array();
+	
+	function showFiles(t){
+		totalnum=totalnum_softurl;
+		showinput_softurl();
+		arr=t.split('|');
+		urldb[totalnum]=arr[0];
+		arr2=arr[1].split('.');
+		titledb[totalnum]=arr2[0];
+		for(var i=0;i<=totalnum;i++){
+			if(document.getElementById("atc_softurl_url"+i)!=null){
+				if(urldb[i]!=undefined){
+					document.getElementById("atc_softurl_url"+i).value=urldb[i];
+					document.getElementById("atc_softurl_name"+i).value=titledb[i];
+				}
+			}
+		}
+	}
+	</script>
+              <!--
+EOT;
+$num=count($rsdb[softurl][url]);
+$job=='postnew' && $num=0;
+for( $i=0; $i<$num ;$i++ ){print <<<EOT
+-->
+              <span id=span$i>名称: 
+              <input type="text" name="post_db[softurl][name][]" id="atc_softurl_name$i" size="15" value="{$rsdb[softurl][name][$i]}">
+              消耗{$webdb[MoneyName]}: 
+              <input type="text" name="post_db[softurl][fen][]" id="atc_softurl_fen$i" size="3" value="{$rsdb[softurl][fen][$i]}">
+              地址: 
+              <input type="text" name="post_db[softurl][url][]" id="atc_softurl_url$i" size="30" value="{$rsdb[softurl][url][$i]}">
+              [<a href='javascript:' onClick='window.open("$webdb[www_url]/do/upfile.php?fn=upfile_softurl&dir=$_pre$fid&label=$i","","width=350,height=50,top=200,left=400")'><font color="#FF0000">点击更换文件</font></a>] 
+              [<A HREF="javascript:delpic('$i')">移除</A>] <br>
+              </span> 
+              <!--
+EOT;
+}print <<<EOT
+-->
+              <div id="input_softurl"></div>
+              <script LANGUAGE="JavaScript">
+function kill_Err(){
+	return true;
+}
+window.onerror=kill_Err;
+function delpic(t){
+	document.getElementById('atc_softurl_url'+t).value='';
+	document.getElementById('span'+t).style.display='none';
+}
+totalnum_softurl=$num;	
+function showinput_softurl(){	
+	var str=document.getElementById("input_softurl").innerHTML;	
+
+	if(parent.document.getElementById('member_mainiframe')!=null){
+	parent.document.getElementById('member_mainiframe').height=parseInt(parent.document.getElementById('member_mainiframe').height)+18;
+	}	
+	    str+='<span id=span'+totalnum_softurl+'>名称: &nbsp;<input type="text" name="post_db[softurl][name][]" id="atc_softurl_name'+totalnum_softurl+'" size="15"> 消耗{$webdb[MoneyName]}: &nbsp;<input type="text" name="post_db[softurl][fen][]" id="atc_softurl_fen'+totalnum_softurl+'" size="3"> 地址: &nbsp;<input type="text" name="post_db[softurl][url][]" id="atc_softurl_url'+totalnum_softurl+'" size="30" > [<a href=\'javascript:\' onClick=\'window.open("$webdb[www_url]/do/upfile.php?fn=upfile_softurl&dir=$_pre$fid&label='+totalnum_softurl+'","","width=350,height=50,top=200,left=400")\'><font color="#FF0000">上传更换文件</font></a>] [<a href="javascript:delpic(\''+totalnum_softurl+'\')">移除</a>]<br></span>';	
+	totalnum_softurl++;
+	document.getElementById("input_softurl").innerHTML=str;	
+}	
+	
+function upfile_softurl(url,name,size,label){	
+	document.getElementById("atc_softurl_url"+label).value=url;	
+	arr=name.split('.');	
+	document.getElementById("atc_softurl_name"+label).value=arr[0];	
+}	
+</SCRIPT>
+            </td>
+          </tr>
+          <tr class="basetr"> 
+            <td class="tdL">相关设置：</td>
+            <td class="tdR"> <span close="0$web_admin$groupdb[PassContribute]"> 
+              <input type="checkbox" name="postdb[yz]" value="1" $yz>
+              审核 </span> <span close="0$web_admin$groupdb[SetArticleTopCom]"> 
+              <input type="checkbox" name="postdb[top]" value="1" $top>
+              置顶 
+              <input type="checkbox" name="postdb[levels]" value="1" $levels>
+              推荐 </span> 
+              <input type="checkbox" name="postdb[target]" value="1" $target>
+              新窗口打开 $baseSpecial </td>
+          </tr>
+          <!--
+EOT;
+}print <<<EOT
+-->
+          $Article_Module 
+          <tr class="basetr"> 
+            <td class="tdL">工具箱：</td>
+            <td class="tdR"> 
+              <SCRIPT LANGUAGE="JavaScript">
+<!--
+function ExplodePage_type(t){
+	get_obj('ExplodePage_auto').style.display='none';
+	get_obj('ExplodePage_hand').style.display='none';
+	if(t=='1'){
+		get_obj('ExplodePage_auto').style.display='';
+	}else if(t=='-1'){
+		get_obj('ExplodePage_hand').style.display='';
+	}
+}
+function CopyText(obj) {
+	ie = (document.all)? true:false
+	if (ie){
+		var rng = document.body.createTextRange();
+		rng.moveToElementText(obj);
+		rng.scrollIntoView();
+		rng.select();
+		rng.execCommand("Copy");
+		rng.collapse(false);
+		alert(obj.innerText+'被复制成功');
+	}
+}
+//-->
+</SCRIPT>
+              <input type="checkbox" name="GetOutPic" value="1">
+              是否将内容中的外部图片采集回来（网速慢时，很影响速度）<br>
+              <input type="checkbox" name="DelLink" value="1">
+              是否将内容中的超级链接去除 </td>
+          </tr>
+          <!--
+EOT;
+if($groupdb[PostArticleYzImg]&&!$web_admin){
+print <<<EOT
+-->
+          <tr class="basetr"> 
+            <td class="tdL">请输入验证码：(<span>*</span>)</td>
+            <td class="tdR"> 
+              <input type="text" name="yzimg" size="8" id="yzimg">
+              <img border="0" name="imageField" src="$webdb[www_url]/do/yzimg.php"> 
+            </td>
+          </tr>
+          <!--
+EOT;
+}
+$contentword = $m_config[moduleSet][content_name] ? "{$m_config[moduleSet][content_name]}" : "内容";
+print <<<EOT
+-->
+          <tr class="basetr" id="contenttr"> 
+            <td class="tdL">{$contentword}：(<span>*</span>)</td>
+            <td class="tdR"> 
+              <!--<iframe id="eWebEditor1" name="eWebEditor1"  src="$webdb[www_url]/ewebeditor/ewebeditor.php?id=content&style=standard&etype={$m_config[moduleSet][etype]}" frameborder="0" scrolling="no" width="{$m_config[moduleSet][edit_w]}" height="{$m_config[moduleSet][edit_h]}"></iframe> 
+              <input name="postdb[content]" type="hidden" id="content" value='$rsdb[content]'>-->
+              <!--
+EOT;
+if($webdb[EditSystem]=='2'){print <<<EOT
+-->
+              <textarea id="content1" name="postdb[content]" style="display:none;">$rsdb[content]</textarea>
+              <script type="text/javascript">
+CKEDITOR.replace( 'content1',
+{
+width:'100%',
+height:'250px',
+filebrowserBrowseUrl : '$webdb[www_url]/ewebeditor/ckfinder/ckfinder.html',
+filebrowserImageBrowseUrl : '$webdb[www_url]/ewebeditor/ckfinder/ckfinder.html?Type=Images',
+filebrowserFlashBrowseUrl : '$webdb[www_url]/ewebeditor/ckfinder/ckfinder.html?Type=Flash',
+filebrowserUploadUrl : '$webdb[www_url]/ewebeditor/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files',
+filebrowserImageUploadUrl : '$webdb[www_url]/ewebeditor/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images',
+filebrowserFlashUploadUrl : '$webdb[www_url]/ewebeditor/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash'
+});
+</script>
+              <!--
+EOT;
+}else{print <<<EOT
+-->
+              <script type="text/javascript" charset="utf-8" src="$webdb[www_url]/ewebeditor/3.1.1/kindeditor.js"></script>
+              <script type="text/javascript">
+KE.handpage=true;
+KE.systype='article';
+    KE.show({
+        id : 'content1',
+        cssPath : '$webdb[www_url]/ewebeditor/common.css'{$simpleEdit}
+    });
+</script>
+              <textarea id="content1" name="postdb[content]" style="width:99%;height:{$m_config[moduleSet][edit_h]}px;visibility:hidden;">$rsdb[content]</textarea>
+              <!--
+EOT;
+}print <<<EOT
+-->
+            </td>
+          </tr>
+          <tr> 
+            <td class="submit" colspan="2"> <br/>
+              <br/>
+              <input type="submit" name="Submit" value=" 提 交 ">
+              <input type="hidden" name="postdb[bak_id]" value="$bak_id">
+              <input type="hidden" name="mid" value="$mid">
+              <input type="hidden" name="i_id" value="$i_id">
+              <input type="hidden" name="aid" value="$aid">
+              <input type="hidden" name="rid" value="$rid">
+              <input type="hidden" name="only" value="$only">
+              <br/>
+              <br/>
+            </td>
+          </tr>
+        </table>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="borderTable" id="othertable">
+          <tr class="othertr"> 
+            <td class="tdL">所属专题：</td>
+            <td class="tdR"> 
+              <div style="width:100%;height:100px;overflow-y:scroll;">$specials</div>
+            </td>
+          </tr>
+          <tr class="othertr"> 
+            <td class="tdL">所属辅栏目:</td>
+            <td class="tdR">$fu_sort</td>
+          </tr>
+          <tr class="othertr" close="0$web_admin$groupdb[SetHtmlName]"> 
+            <td class="tdL">自定义文件名：</td>
+            <td class="tdR"> 
+              <input type="text" name="postdb[htmlname]" size="30" value="$rsdb[htmlname]">
+              (只有把文章生成静态后,才能生效) </td>
+          </tr>
+          <tr class="othertr" close="0$web_admin$groupdb[SelectArticleTpl]$groupdb[SetArticleTpl]"> 
+            <td class="tdL">模板选择：</td>
+            <td class="tdR"> 网页头部： 
+              <input type="text" {$readonly} name="postdb[tpl][head]" size="50" id="head_tpl" value="$value_tpl_head">
+              {$tpl_head}<br>
+              网页尾部： 
+              <input type="text" {$readonly} name="postdb[tpl][foot]" size="50" id="foot_tpl" value="$value_tpl_foot">
+              {$tpl_foot} <br>
+              网页中间： 
+              <input type="text" {$readonly} name="postdb[tpl][bencandy]" size="50" id="main_tpl" value="$value_tpl_show">
+              {$tpl_show} </td>
+          </tr>
+          <tr class="othertr" close="0$web_admin$groupdb[SelectArticleStyle]"> 
+            <td class="tdL">风　格：</td>
+            <td class="tdR">$style_select</td>
+          </tr>
+          <tr class="othertr" close="0$web_admin$groupdb[SetArticlePosttime]"> 
+            <td class="tdL">日　期：</td>
+            <td class="tdR"> 
+              <input type="text" name="postdb[posttime]" size="20" value="$rsdb[posttime]"  onClick="setday(this)" >
+            </td>
+          </tr>
+          <tr class="othertr" close="0$web_admin$groupdb[SetArticleViewtime]"> 
+            <td class="tdL">浏览日期：</td>
+            <td class="tdR"> 开始浏览日期： 
+              <input type="text" name="postdb[begintime]" size="20" value="$rsdb[begintime]"  onClick="setday(this)" >
+              (0或留空,则不做限制.否则日期未到或超过了就不能看)<br>
+              结束浏览日期： 
+              <input type="text" name="postdb[endtime]" size="20" value="$rsdb[endtime]"  onClick="setday(this)" >
+            </td>
+          </tr>
+          <tr class="othertr" close="0$web_admin$groupdb[SetArticleHitNum]"> 
+            <td class="tdL">点　击：</td>
+            <td class="tdR"> 
+              <input type="text" name="postdb[hits]" size="10" value="$rsdb[hits]">
+            </td>
+          </tr>
+          <tr class="othertr" close="0$web_admin$groupdb[SetArticleDownGroup]"> 
+            <td class="tdL">下载附件的用户组：</td>
+            <td class="tdR">$group_allowdown</td>
+          </tr>
+          <tr class="othertr" close="0$web_admin$groupdb[SetArticleJumpurl]"> 
+            <td class="tdL">跳转地址：</td>
+            <td class="tdR"> 
+              <input type="text" name="postdb[jumpurl]" size="40" value="$rsdb[jumpurl]" id="jumpurl"  disabled>
+              <input type="checkbox" name="ckjump" id="ckjump" value="checkbox" onClick="changpost('jump',0);">
+              (选中后,将不显示内容而跳转到此网址) </td>
+          </tr>
+          <tr class="othertr" id="iframetr" close="0$web_admin$groupdb[SetArticleIframeurl]"> 
+            <td class="tdL">框架地址：</td>
+            <td class="tdR"> 
+              <input type="text" name="postdb[iframeurl]" size="40" value="$rsdb[iframeurl]" id="iframeurl" disabled>
+              <input type="checkbox" name="ckiframe" id="ckiframe" value="checkbox" onClick="changpost('iframe',0);">
+              (选中后,将不显示内容而套用框架此网址) </td>
+          </tr>
+        </table>
+       
+    </td>
+  </tr>
+</table>
+<SCRIPT LANGUAGE="JavaScript">
+<!--
+function changpost(va,num){
+	if(va=="jump"){
+		if(get_obj("ckjump").checked==true||num==1){
+			if(num==1){get_obj("ckjump").checked=true}
+			get_obj("jumpurl").disabled=false;
+			get_obj("iframeurl").disabled=true;
+			get_obj("ckiframe").checked=false;
+			get_obj("contenttr").style.display="none";
+		}else{
+			get_obj("jumpurl").disabled=true;
+			get_obj("ckiframe").checked=false;
+			get_obj("contenttr").style.display="";
+		}
+	}else{
+		if(get_obj("ckiframe").checked==true||num==1){
+			if(num==1){get_obj("ckiframe").checked=true}
+			get_obj("iframeurl").disabled=false;
+			get_obj("jumpurl").disabled=true;
+			get_obj("ckjump").checked=false;
+			get_obj("contenttr").style.display="none";
+		}else{
+			get_obj("iframeurl").disabled=true;
+			get_obj("ckjump").checked=false;
+			get_obj("contenttr").style.display="";
+		}
+	}
+}
+
+//判断用户组是否有权限使用此表单元素
+function set_close(){
+	var obj=document.body.getElementsByTagName("tr");
+	for(var i=0;i<obj.length;i++){
+		va=obj[i].getAttribute("close");
+		va=parseInt(va);
+		if(va==0){
+			obj[i].style.display='none';	
+		}
+	}
+	var obj=document.body.getElementsByTagName("span");
+	for(var i=0;i<obj.length;i++){
+		va=obj[i].getAttribute("close");
+		va=parseInt(va);
+		if(va==0){
+			obj[i].style.display='none';	
+		}
+	}
+}
+
+
+function choosetable(t){
+	get_obj("button_base").className="";
+	get_obj("button_other").className="";
+	if(document.getElementById("button_vote")!=null)get_obj("button_vote").className="";
+	get_obj("basetable").style.display="none";
+	get_obj("othertable").style.display="none";
+	//get_obj("votetable").style.display="none";
+	
+	get_obj("button_"+t).className="choosebutton";
+	get_obj(t+"table").style.display="";
+	set_close();
+}
+choosetable('base');
+//-->
+</SCRIPT>
+              <!--
+EOT;
+if($rsdb[jumpurl]){print <<<EOT
+-->
+              <SCRIPT LANGUAGE="JavaScript">
+<!--
+changpost('jump',1);
+//-->
+</SCRIPT>
+              <!--
+EOT;
+}elseif($rsdb[iframeurl]){print <<<EOT
+-->
+              <SCRIPT LANGUAGE="JavaScript">
+<!--
+//show_more(1);
+changpost('iframe',1);
+//-->
+</SCRIPT>
+              <!--
+EOT;
+}print <<<EOT
+-->
+<SCRIPT LANGUAGE="JavaScript">
+<!--
+function ck_iframe(user){
+	var jobs='$job';
+	if(user!=''&&window.self==window.top&&jobs=='postnew'){
+		window.location.href='$webdb[www_url]/member/index.php?main=$Murl/member/post.php?job=postnew&fid=$fid';
+	}
+}
+ck_iframe('$lfjid');
+//-->
+</SCRIPT>
+</form>
+<!--
+EOT;
+?>
+-->

@@ -1,0 +1,34 @@
+<!--
+<?php
+print <<<EOT
+--> 
+<table id="top_menu" width='100%' cellspacing='1' cellpadding='3' class="tablewidth">
+  <tr bgcolor='#FFFFFF'> 
+    <td bgcolor="#FFFFFF"><center>
+
+<!--
+EOT;
+if(is_writable(Mpath."$_dirname")){print <<<EOT
+-->
+
+<br><br><br><A HREF='$admin_path&job=del&fid=$fid&type=$type&step=2'><FONT COLOR='red'>$_dirname</FONT>,你确认要删除此目录的文件吗?</A><br><br><br>
+
+<!--
+EOT;
+}else{print <<<EOT
+-->
+
+<FONT COLOR='red'>$_dirname</FONT>,文件不存在或目录不可写
+
+
+<!--
+EOT;
+}print <<<EOT
+-->
+</center>
+  </tr>
+</table>
+<!--
+EOT;
+?>
+-->

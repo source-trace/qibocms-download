@@ -1,0 +1,2 @@
+<?php 
+$show=stripslashes('ÔÝÎÞ...'); ?>

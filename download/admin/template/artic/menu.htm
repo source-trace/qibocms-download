@@ -1,0 +1,29 @@
+<!--
+<?php
+print <<<EOT
+--> 
+<table id="top_menu" width="100%" border="0" cellspacing="1" cellpadding="3" class="tablewidth">
+  <tr> 
+    <td> [<a href="$admin_path&job=listartic&only=$only&mid=$mid">内容管理</a>] 
+
+	[<a href="$admin_path&file=post&job=postnew&fid=$fid">发表</a>] 
+      [<a href="$admin_path&job=listartic&type=my&only=$only&mid=$mid">我发表的</a>] [<a href="$admin_path&job=listartic&type=unyz&only=$only&mid=$mid">待审核</a>] 
+      [<a href="$admin_path&job=listartic&type=rubbish&only=$only&mid=$mid">回收站管理</a>]
+	  <!--
+EOT;
+if($fid){print <<<EOT
+-->
+[<a href="$Murl/list.php?fid=$fid" target="_blank">浏览栏目</a>] 
+	[<a href="$admin_path&file=sort&job=editsort&fid=$fid">栏目设置</a>] 
+ <!--
+EOT;
+}
+print <<<EOT
+--></td>
+	 
+  </tr>
+</table>
+<!--
+EOT;
+?>
+-->

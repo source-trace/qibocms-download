@@ -1,0 +1,101 @@
+<!--
+<?php
+print <<<EOT
+--> 
+ 
+<table width='100%' cellspacing='1' cellpadding='3' class="tablewidth">
+  <form name="form1" method="post" action="$admin_path&action=config">
+    <tr class="head"> 
+      <td colspan='2' > 
+        <div align='center'><b><font color="#FFFFFF">静态网页生成设置</font></b></div>
+      </td>
+    </tr>
+    <tr> 
+      <td bgcolor='#FFFFFF' rowspan="2" width="23%">文章列表页与内容页是否生成静态网页:</td>
+      <td bgcolor='#FFFFFF' width="77%"> 
+        <input type="radio" name="webdbs[Html_Type]" value="0" $Html_Type[0] onclick="NewsMakeHtml('0')">
+        不生成静态 
+        <input type="radio" name="webdbs[Html_Type]" value="1" $Html_Type[1] onclick="NewsMakeHtml('1')">
+        生成真静态 </td>
+    </tr>
+    <tr> 
+      <td bgcolor='#FFFFFF' id="NewsMakeHtmlConfig_1" width="77%"> 真静态列表页的表现形式 
+        <input type="text" name="webdbs[Info_html_list]" size="50" value="$webdb[Info_html_list]">
+        默认:“html/{\$fid}/{\$page}.htm”<br>
+        真静态内容页的表现形式 
+        <input type="text" name="webdbs[Info_html_show]" size="50" value="$webdb[Info_html_show]">
+        默认:“html/{\$fid}/{\$dirid}/{\$id}/{\$page}.htm”<br>
+        <br>
+        专题真静态列表页的表现形式 
+        <input type="text" name="webdbs[special_list_html]" size="50" value="$webdb[special_list_html]">
+        默认:“html/special{\$fid}/list{\$page}.htm”<br>
+        专题真静态内容页的表现形式 
+        <input type="text" name="webdbs[special_show_html]" size="50" value="$webdb[special_show_html]">
+        默认:“html/special{\$fid}/show{\$id}.htm”<br>
+        <font color="#FF0000">注意事项:</font> <br>
+        <font color="#0000FF"><b>生成真静态的话,以上不能为空.</b></font></td>
+    </tr><tr> 
+      <td width='23%' bgcolor='#FFFFFF'>启用静态后,是否禁止访问动态PHP列表与内容页</td>
+      <td bgcolor='#FFFFFF' width="77%">
+        <input type="radio" name="webdbs[ForbidShowPhpPage]" value="0" $ForbidShowPhpPage[0]  >
+        允许访问 
+        <input type="radio" name="webdbs[ForbidShowPhpPage]" value="1" $ForbidShowPhpPage[1]  >
+        禁止访问 </td>
+    </tr><tr> 
+      <td bgcolor='#FFFFFF' width="40%">默认静态列表首页是:<span help=1>一般情况都是index.htm,但是也有个别情况是index.htm<font color="#FF0000">l</font>,当你生成列表页后.列表页的第一页无法访问时,请更改这里后,再批量的重新生成一次列表页试试</span></td>
+      <td bgcolor='#FFFFFF' width="60%"> 
+        <input type="radio" name="webdbs[DefaultIndexHtml]" value="2" $DefaultIndexHtml[2]>
+        index.<font color="#FF0000">s</font>htm<font color="#FF0000">l</font> 
+        <input type="radio" name="webdbs[DefaultIndexHtml]" value="1" $DefaultIndexHtml[1]>
+        index.htm<font color="#FF0000">l</font> 
+        <input type="radio" name="webdbs[DefaultIndexHtml]" value="0" $DefaultIndexHtml[0]>
+        index.htm (一般选择index.htm) </td>
+    </tr>
+    <tr> 
+      <td width='23%' bgcolor='#FFFFFF'>&nbsp;</td>
+      <td bgcolor='#FFFFFF' width="77%"> 
+        <input    type='submit' name='w' value='保存设置'>
+      </td>
+    </tr>
+  </form>
+</table>
+<table width='100%' cellspacing='1' cellpadding='3' class="tablewidth">
+   
+    <tr class="head"> 
+      
+    <td colspan='2' align="left" > <b><font color="#FFFFFF">帮助说明:</font></b></td>
+    </tr>
+  <tr>
+    <td>1.当网站数据比较多的时候,建议生成静态,这样可以很好的加快网站访问速度.同时也有利于百度与谷歌等搜索引擎的收录.<br>
+      2.内容页与列表页的\$page变量指的是分页,不能去掉.<br>
+      3.内容页的分目录布署静态页\$dirid,也尽量不要删除,不删除的话,将会自动按大约每一千个文件自动分目录.优化服务器磁盘索引.当你每个栏目的文章少于3000篇的时候,删除也是影响不大的.可自由把握.<br>
+      4.\$id指的是文章的ID,不可删除.\$fid指的是栏目的FID也是不可删除.<br>
+      5.静态网页后缀名,可根据服务器是否支持.切换成.html或.shtml格式,当然你要切换成.dl或.jav也是可以的.前提是你的服务器必须设置支持才行.<br>
+      6.当栏目是首页时,内容页是首页时,文章小于1000篇时,\$page,\$dirid前面用<font color="#FF0000">-或_</font>间隔时(如果不用这两个符号做间隔的,将不作处理,为兼容以前旧版本考虑),系统程序都特别处理过,自动隐藏了,便于搜索引擎与URL的美观考虑.<br>
+      8.html/可以删除.这样就更美化一些.也更利于搜索引擎.但目录就会生成在根目录下.<br>
+      9.以上是默认设置,具体到每个栏目,又可以特殊设置成个性的URL.具体到某篇文章,也可以设置文章的特别URL文件名字<br>
+      10.{\$page}{\$fid}{\$id}变量前面 </td>
+  </tr>
+</table>
+<SCRIPT LANGUAGE="JavaScript">
+<!--
+
+function NewsMakeHtml(va){
+	if(va=='0'||va==''){
+		document.getElementById("NewsMakeHtmlConfig_1").style.display='none';
+		//document.getElementById("NewsMakeHtmlConfig_2").style.display='none';
+	}else if(va==2){
+		document.getElementById("NewsMakeHtmlConfig_1").style.display='none';
+		//document.getElementById("NewsMakeHtmlConfig_2").style.display='';
+	}else if(va==1){
+		document.getElementById("NewsMakeHtmlConfig_1").style.display='';
+		//document.getElementById("NewsMakeHtmlConfig_2").style.display='none';
+	}
+}
+NewsMakeHtml('$webdb[Html_Type]');
+//-->
+</SCRIPT>
+<!--
+EOT;
+?>
+-->

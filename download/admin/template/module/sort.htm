@@ -1,0 +1,52 @@
+<!--
+<?php
+print<<<EOT
+--><table width=100% cellspacing=1 cellpadding=3  class="tablewidth"><form name="formlist" method="post" action="$admin_path&action=editlist">
+  <tr> 
+    <td class="head" bgcolor="#EAEAEA">模型管理</td>
+  </tr>
+  <tr> 
+      <td bgcolor=#FFFFFF align="left"> 
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+          <tr align="center" height="18" class="head"> 
+            <td width="5%" style="border-right:1px solid #fff;">FID</td>
+            <td  style="border-right:1px solid #fff;" width="40%">模型名称</td>
+            <td  style="border-right:1px solid #fff;" width="10%">&nbsp;</td>
+            <td width="6%" style="border-right:1px solid #fff;">&nbsp;</td>
+            <td width="9%" style="border-right:1px solid #fff;">字段设置</td>
+            <td width="9%" style="border-right:1px solid #fff;">模型设置</td>
+            <td width="8%" style="border-right:1px solid #fff;">生成模板</td>
+            <td width="8%" style="border-right:1px solid #fff;">应用栏目</td>
+            <td width="5%" style="border-right:1px solid #fff;">&nbsp;</td>
+          </tr>
+          <!--
+EOT;
+foreach($listdb AS $key=>$rs){
+print <<<EOT
+-->
+          <tr class="trA" onmouseover="this.className='trB'" onmouseout="this.className='trA'"> 
+            <td width="5%" bgcolor="#FFFFFF" align="center" style="border-bottom:1px dotted #ccc;"><b><font color="#FF0000">$rs[id]</font></b></td>
+            <td bgcolor="#FFFFFF" style="border-bottom:1px dotted #ccc;"> 【<a href='$admin_path&job=editsort&id=$rs[id]' target="_self">{$rs[name]}</a>】</td>
+            <td bgcolor="#FFFFFF" style="border-bottom:1px dotted #ccc;" align="center">&nbsp; 
+            </td>
+            <td width="6%" bgcolor="#FFFFFF" align="center" style="border-bottom:1px dotted #ccc;">&nbsp; 
+            </td>
+            <td width="9%" bgcolor="#FFFFFF" align="center" style="border-bottom:1px dotted #ccc;">[<a href='$admin_path&job=editsort&id=$rs[id]'><font color="red">字段修改</font></a>]</td>
+            <td width="9%" bgcolor="#FFFFFF" align="center" style="border-bottom:1px dotted #ccc;"><a href="$admin_path&job=editmodule&id=$rs[id]">设置</a></td>
+            <td width="8%" bgcolor="#FFFFFF" align="center" style="border-bottom:1px dotted #ccc;"><a href="$admin_path&job=tpl&id=$rs[id]">生成模板</a></td>
+            <td width="8%" bgcolor="#FFFFFF" align="center" style="border-bottom:1px dotted #ccc;">{$rs[NUM]}个</td>
+            <td width="5%" bgcolor="#FFFFFF" align="center" style="border-bottom:1px dotted #ccc;">&nbsp;</td>
+          </tr>
+          <!--
+EOT;
+}print <<<EOT
+-->
+        </table>
+        <div align="center"></div>
+      </td>
+  </tr> </form>
+</table>
+<!--
+EOT;
+?>
+-->
